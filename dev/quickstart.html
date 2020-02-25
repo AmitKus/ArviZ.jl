@@ -47,7 +47,7 @@ sampler = NUTS(nwarmup, 0.8)
 
 rng = Random.MersenneTwister(5130)
 turing_chns = psample(
-	rng,
+    rng,
     param_mod,
     sampler,
     nwarmup + nsamples,

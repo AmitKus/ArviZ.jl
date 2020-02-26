@@ -45,13 +45,14 @@ end
 param_mod = turing_model(J, y, σ)
 sampler = NUTS(nwarmup, 0.8)
 
+rng = Random.MersenneTwister(5130)
 turing_chns = psample(
     param_mod,
     sampler,
     nwarmup + nsamples,
     nchains;
-    progress = true,
-);</code></pre><p>Most ArviZ functions work fine with <code>Chains</code> objects from Turing:</p><pre><code class="language-julia">plot_autocorr(convert_to_inference_data(turing_chns); var_names = [&quot;μ&quot;, &quot;τ&quot;]);</code></pre><p><img src="quick_turingautocorr.svg" alt/></p><h3 id="Convert-to-InferenceData-1"><a class="docs-heading-anchor" href="#Convert-to-InferenceData-1">Convert to <code>InferenceData</code></a><a class="docs-heading-anchor-permalink" href="#Convert-to-InferenceData-1" title="Permalink"></a></h3><p>For much more powerful querying, analysis and plotting, we can use built-in ArviZ utilities to convert <code>Chains</code> objects to xarray datasets. Note we are also giving some information about labelling.</p><p>ArviZ is built to work with <a href="reference.html#ArviZ.InferenceData"><code>InferenceData</code></a> (a netcdf datastore that loads data into <code>xarray</code> datasets), and the more <em>groups</em> it has access to, the more powerful analyses it can perform.</p><pre><code class="language-julia">idata = from_mcmcchains(
+    progress = false,
+);</code></pre><p>Most ArviZ functions work fine with <code>Chains</code> objects from Turing:</p><pre><code class="language-julia">plot_autocorr(turing_chns; var_names = [&quot;μ&quot;, &quot;τ&quot;]);</code></pre><p><img src="quick_turingautocorr.svg" alt/></p><h3 id="Convert-to-InferenceData-1"><a class="docs-heading-anchor" href="#Convert-to-InferenceData-1">Convert to <code>InferenceData</code></a><a class="docs-heading-anchor-permalink" href="#Convert-to-InferenceData-1" title="Permalink"></a></h3><p>For much more powerful querying, analysis and plotting, we can use built-in ArviZ utilities to convert <code>Chains</code> objects to xarray datasets. Note we are also giving some information about labelling.</p><p>ArviZ is built to work with <a href="reference.html#ArviZ.InferenceData"><code>InferenceData</code></a> (a netcdf datastore that loads data into <code>xarray</code> datasets), and the more <em>groups</em> it has access to, the more powerful analyses it can perform.</p><pre><code class="language-julia">idata = from_mcmcchains(
     turing_chns,
     coords = Dict(&quot;school&quot; =&gt; schools),
     dims = Dict(
@@ -396,76 +397,76 @@ dl.xr-attrs {
   stroke: currentColor;
   fill: currentColor;
 }
-</style><div class='xr-wrap'><div class='xr-header'><div class='xr-obj-type'>Dataset (xarray.Dataset)</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-2c60261e-3e2a-484e-ace1-81218dfcc0a9' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-2c60261e-3e2a-484e-ace1-81218dfcc0a9' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>chain</span>: 4</li><li><span class='xr-has-index'>draw</span>: 1000</li><li><span class='xr-has-index'>school</span>: 8</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-c4771934-280b-42ea-bc80-6f2fe00a1602' class='xr-section-summary-in' type='checkbox'  checked><label for='section-c4771934-280b-42ea-bc80-6f2fe00a1602' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(chain)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3</div><input id='attrs-12881222-8ed6-4467-84c4-c4dd1586bfad' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-12881222-8ed6-4467-84c4-c4dd1586bfad' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bfd37d07-ae83-4425-9dd3-62a1038aaf43' class='xr-var-data-in' type='checkbox'><label for='data-bfd37d07-ae83-4425-9dd3-62a1038aaf43' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([0, 1, 2, 3])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(draw)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-3a213dcd-9a32-4845-9f8b-62603e1c4a93' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-3a213dcd-9a32-4845-9f8b-62603e1c4a93' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9ca3ca61-bf0f-40ce-80e5-7e0634e63f86' class='xr-var-data-in' type='checkbox'><label for='data-9ca3ca61-bf0f-40ce-80e5-7e0634e63f86' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([  0,   1,   2, ..., 997, 998, 999])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>school</span></div><div class='xr-var-dims'>(school)</div><div class='xr-var-dtype'>&lt;U16</div><div class='xr-var-preview xr-preview'>&#x27;Choate&#x27; ... &#x27;Mt. Hermon&#x27;</div><input id='attrs-97da2f92-ef1d-4935-9c91-f9251658d302' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-97da2f92-ef1d-4935-9c91-f9251658d302' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b6ed9668-4a13-4257-a9a0-33db096a8854' class='xr-var-data-in' type='checkbox'><label for='data-b6ed9668-4a13-4257-a9a0-33db096a8854' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([&#x27;Choate&#x27;, &#x27;Deerfield&#x27;, &#x27;Phillips Andover&#x27;, &#x27;Phillips Exeter&#x27;,
-       &#x27;Hotchkiss&#x27;, &#x27;Lawrenceville&#x27;, &quot;St. Paul&#x27;s&quot;, &#x27;Mt. Hermon&#x27;], dtype=&#x27;&lt;U16&#x27;)</pre></li></ul></div></li><li class='xr-section-item'><input id='section-9282e5fd-2a5d-49cb-b356-85b3fd633df5' class='xr-section-summary-in' type='checkbox'  checked><label for='section-9282e5fd-2a5d-49cb-b356-85b3fd633df5' class='xr-section-summary' >Data variables: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>μ</span></div><div class='xr-var-dims'>(chain, draw)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>3.305 2.345 3.058 ... 2.119 5.054</div><input id='attrs-de57d127-a872-4783-8447-46b50d2c8b87' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-de57d127-a872-4783-8447-46b50d2c8b87' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f243aad6-a5d5-4ab5-b0f4-f5abf84f6911' class='xr-var-data-in' type='checkbox'><label for='data-f243aad6-a5d5-4ab5-b0f4-f5abf84f6911' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([[ 3.30525149,  2.34487813,  3.05829645, ...,  5.24526471,
-         4.42846717,  4.522011  ],
-       [ 4.51425554,  4.37381908,  5.19878346, ...,  4.24867028,
-         3.25986382,  5.51661768],
-       [ 1.94356216, -0.93760709,  0.90802825, ...,  4.74029606,
-         4.74029606,  4.53333644],
-       [ 9.59813474,  8.13472905, 11.97539015, ...,  1.13975013,
-         2.11882422,  5.05367953]])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span>τ</span></div><div class='xr-var-dims'>(chain, draw)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.6879 0.6479 ... 3.398 7.237</div><input id='attrs-a231a553-eec0-4583-9af4-07ea4b7604ec' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-a231a553-eec0-4583-9af4-07ea4b7604ec' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-99c404fc-c468-4bd4-bf20-71884719588b' class='xr-var-data-in' type='checkbox'><label for='data-99c404fc-c468-4bd4-bf20-71884719588b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([[ 0.68793368,  0.64787394,  0.72335522, ...,  9.35253698,
-        10.22606796,  8.71508376],
-       [ 1.01039473,  0.81359069,  0.73373027, ...,  3.09998285,
-         2.9734463 ,  2.01517862],
-       [ 3.01210659,  4.26721503,  3.5705303 , ...,  0.4347157 ,
-         0.4347157 ,  0.48338183],
-       [ 4.15118198, 12.16098173,  4.51125597, ...,  6.01806191,
-         3.39849132,  7.23737065]])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span>θ</span></div><div class='xr-var-dims'>(chain, draw, school)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>4.075 2.782 4.191 ... 7.114 9.62</div><input id='attrs-1419244e-9864-4c16-8d3d-f48bcfa37e15' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-1419244e-9864-4c16-8d3d-f48bcfa37e15' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0c511eb4-a690-4378-9f55-bd7d4f928823' class='xr-var-data-in' type='checkbox'><label for='data-0c511eb4-a690-4378-9f55-bd7d4f928823' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([[[  4.07463326,   2.78212647,   4.19106254, ...,   2.48705916,
-           3.50300245,   3.11765717],
-        [  2.20080012,   2.09233286,   2.28588542, ...,   3.2186879 ,
-           2.97864441,   3.00008265],
-        [  2.42375564,   3.57028963,   2.18843992, ...,   2.71747734,
-           2.93360042,   3.07718092],
+</style><div class='xr-wrap'><div class='xr-header'><div class='xr-obj-type'>Dataset (xarray.Dataset)</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-d22d8047-4db8-4148-8057-e04ad92ddb9e' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-d22d8047-4db8-4148-8057-e04ad92ddb9e' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>chain</span>: 4</li><li><span class='xr-has-index'>draw</span>: 1000</li><li><span class='xr-has-index'>school</span>: 8</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-86179cb2-64f0-4dd3-885d-af89466f8afe' class='xr-section-summary-in' type='checkbox'  checked><label for='section-86179cb2-64f0-4dd3-885d-af89466f8afe' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(chain)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3</div><input id='attrs-cf53a40e-ed4f-4087-93f4-98981c0dd2b8' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-cf53a40e-ed4f-4087-93f4-98981c0dd2b8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d59bd468-7fb0-48ff-8d2a-d761e2a07a92' class='xr-var-data-in' type='checkbox'><label for='data-d59bd468-7fb0-48ff-8d2a-d761e2a07a92' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([0, 1, 2, 3])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(draw)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-ab708b39-4758-4782-b315-70270716ffa3' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-ab708b39-4758-4782-b315-70270716ffa3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bcdd567f-cab5-49d4-948c-b1925508118a' class='xr-var-data-in' type='checkbox'><label for='data-bcdd567f-cab5-49d4-948c-b1925508118a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([  0,   1,   2, ..., 997, 998, 999])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>school</span></div><div class='xr-var-dims'>(school)</div><div class='xr-var-dtype'>&lt;U16</div><div class='xr-var-preview xr-preview'>&#x27;Choate&#x27; ... &#x27;Mt. Hermon&#x27;</div><input id='attrs-ff290cce-c399-4dda-8547-ea0afbe2d532' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-ff290cce-c399-4dda-8547-ea0afbe2d532' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5789edf8-6cfe-43fc-a7d2-bd5bb2cb3ac5' class='xr-var-data-in' type='checkbox'><label for='data-5789edf8-6cfe-43fc-a7d2-bd5bb2cb3ac5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([&#x27;Choate&#x27;, &#x27;Deerfield&#x27;, &#x27;Phillips Andover&#x27;, &#x27;Phillips Exeter&#x27;,
+       &#x27;Hotchkiss&#x27;, &#x27;Lawrenceville&#x27;, &quot;St. Paul&#x27;s&quot;, &#x27;Mt. Hermon&#x27;], dtype=&#x27;&lt;U16&#x27;)</pre></li></ul></div></li><li class='xr-section-item'><input id='section-e1d15aa7-30de-4d67-b117-8f2370250150' class='xr-section-summary-in' type='checkbox'  checked><label for='section-e1d15aa7-30de-4d67-b117-8f2370250150' class='xr-section-summary' >Data variables: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>μ</span></div><div class='xr-var-dims'>(chain, draw)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>1.235 4.837 8.871 ... 6.926 0.9602</div><input id='attrs-0c10c3ff-621f-4d99-890b-1901c50b0370' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-0c10c3ff-621f-4d99-890b-1901c50b0370' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-52f2318d-8c73-4a36-a8d4-59ce2fda0fe2' class='xr-var-data-in' type='checkbox'><label for='data-52f2318d-8c73-4a36-a8d4-59ce2fda0fe2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([[ 1.23534347e+00,  4.83678742e+00,  8.87127701e+00, ...,
+        -2.79310378e+00, -3.27726470e+00, -1.76322873e+00],
+       [ 1.13335463e+00,  1.54834388e+00,  1.68058084e+00, ...,
+         1.29536794e+00,  9.46791803e-01,  7.84587219e-01],
+       [ 2.09525182e+00, -1.88269404e-01,  9.81208721e+00, ...,
+         7.49499435e+00,  1.38047841e-01, -4.28512263e-03],
+       [-2.20533718e+00,  3.94853472e+00,  2.79237924e+00, ...,
+         4.48138709e+00,  6.92588162e+00,  9.60205729e-01]])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span>τ</span></div><div class='xr-var-dims'>(chain, draw)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>13.2 7.413 6.789 ... 1.474 2.12</div><input id='attrs-a6225f58-a6f8-42d4-bd68-da924624ecdf' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-a6225f58-a6f8-42d4-bd68-da924624ecdf' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-dfd23618-0d1e-4b19-a96c-c8d0152c5a0b' class='xr-var-data-in' type='checkbox'><label for='data-dfd23618-0d1e-4b19-a96c-c8d0152c5a0b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([[13.20124552,  7.41258164,  6.78856079, ...,  6.75954136,
+         5.8842155 ,  6.03597309],
+       [ 1.2734498 ,  1.33177867,  1.21255003, ...,  2.82095408,
+         4.48768288,  5.70074035],
+       [ 4.82307376,  7.52038035,  8.87661558, ...,  2.48285217,
+         3.15393432,  3.73209175],
+       [ 5.91041402,  5.18278378,  9.22462862, ...,  2.32076345,
+         1.47425491,  2.12019324]])</pre></li><li class='xr-var-item'><div class='xr-var-name'><span>θ</span></div><div class='xr-var-dims'>(chain, draw, school)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>14.53 -2.974 ... 3.224 0.02335</div><input id='attrs-acc2f125-993c-490e-8e14-2e60bf8d35fc' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-acc2f125-993c-490e-8e14-2e60bf8d35fc' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-123cbaba-a699-492e-94d2-5c7b7c96abfa' class='xr-var-data-in' type='checkbox'><label for='data-123cbaba-a699-492e-94d2-5c7b7c96abfa' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><pre class='xr-var-data'>array([[[ 1.45348093e+01, -2.97444321e+00, -1.11054859e+01, ...,
+         -3.86458329e+00,  2.01818654e+01,  1.95490039e+01],
+        [ 3.90178776e+00, -9.46207065e+00, -1.53415329e+01, ...,
+          3.49222455e+00,  1.77158806e+01,  3.28078623e+00],
+        [ 1.08688132e+01,  8.96784312e+00,  1.72342453e+01, ...,
+          2.39865398e-01,  4.07615836e-01,  5.15628505e+00],
         ...,
-        [  5.26508338,  10.22488119,  13.96794951, ...,  26.80846881,
-          19.08296223,  -5.12777522],
-        [ 17.13463737,  -0.92313157,  -5.56431681, ..., -11.01457899,
-           7.41924734,   8.16748985],
-        [ 18.96067414,  -2.46395226,   2.35768771, ...,   0.11910993,
-           7.5086826 ,   8.64058053]],
+        [ 1.78757221e+00, -2.85918258e+00, -1.37106411e+01, ...,
+          1.51133365e+00, -2.20044255e+00, -8.54988902e+00],
+        [-4.13154080e+00,  3.81585504e+00, -1.09468445e+01, ...,
+          5.55087803e+00,  3.84067634e+00, -6.36864284e+00],
+        [-3.34387524e+00,  2.37678821e+00, -1.27918132e+01, ...,
+          5.04158084e+00,  3.16702887e+00,  7.23273726e-01]],
 
-       [[  5.49134171,   3.72590692,   4.92247391, ...,   5.61803397,
-           4.99013968,   3.85659634],
-        [  4.14224481,   5.2942392 ,   3.98098086, ...,   4.19016882,
-           4.96988281,   4.65551063],
-        [  6.4982077 ,   4.884429  ,   5.34114376, ...,   5.10882867,
-           6.23394816,   4.42100915],
+       [[ 1.13625997e+00,  7.77876956e-01,  9.25127841e-01, ...,
+          4.97492315e-01,  7.16312793e-02,  8.28478324e-01],
+        [ 2.31449947e+00,  7.48708554e-01,  1.79386545e+00, ...,
+          9.32254221e-01,  1.51800309e+00,  1.69552472e+00],
+        [ 1.02027306e+00,  2.49448557e+00,  1.27215777e+00, ...,
+          1.34979830e+00,  2.09887747e+00,  1.22076861e+00],
         ...,
-        [  4.19775567,   7.39836638,  -0.57714207, ...,   9.5670128 ,
-           5.28591259,   5.37721607],
-        [  3.24334636,   4.3412533 ,   3.0828176 , ...,   4.90265185,
-           6.68125798,   1.10489579],
-        [  6.85403406,   9.62354755,   4.19610664, ...,   7.81227583,
-           4.98228147,   4.55425287]],
+        [ 2.88578317e+00, -3.43755050e+00,  4.84768886e+00, ...,
+          3.04386737e+00,  3.78735553e+00,  1.68380670e+00],
+        [-2.73251886e-01, -1.23241481e+00,  5.48086965e+00, ...,
+          2.82469556e+00,  3.52009922e+00,  2.59313474e+00],
+        [ 5.01173285e+00,  4.86981121e+00, -3.20948093e+00, ...,
+          1.27993807e+00,  5.58776441e+00, -4.05322805e+00]],
 
-       [[ -3.85394652,   7.10460484,  -0.11453667, ...,   4.89023084,
-           2.69445254,   1.12789899],
-        [  4.82397435,  -1.86379929,   2.92592401, ...,  -4.82744926,
-           4.26803375,  -4.94104109],
-        [  0.96721258,   2.51018273,  -4.82227942, ...,  -4.90713838,
-          -0.77836404,   6.17446352],
+       [[ 6.38541268e+00,  7.93857879e+00, -4.66201354e+00, ...,
+         -6.24825330e-01,  8.08212190e+00,  2.31497186e-01],
+        [ 3.40350867e+00, -5.88691926e+00,  2.47379392e+00, ...,
+          5.81096727e+00, -2.20684830e+00, -1.30100458e+01],
+        [ 2.46441945e+01,  1.25791669e+01, -3.97257734e-01, ...,
+         -1.04168791e+01,  2.03620424e+01,  2.38216433e+01],
         ...,
-        [  3.94477722,   4.68672094,   5.15122283, ...,   5.25054938,
-           4.67435372,   3.90418726],
-        [  3.94477722,   4.68672094,   5.15122283, ...,   5.25054938,
-           4.67435372,   3.90418726],
-        [  4.79629317,   4.23483253,   4.56261521, ...,   4.52719682,
-           4.63335229,   4.13306957]],
+        [ 1.05184969e+01,  6.87397886e+00,  1.20252235e+01, ...,
+          7.45104586e+00,  6.27692985e+00,  6.36510734e+00],
+        [ 4.26747924e+00, -3.43873771e-01,  3.90888316e+00, ...,
+          1.68758244e-01, -9.23834746e-01,  2.79277535e+00],
+        [ 4.77724511e-01,  4.45743258e+00,  2.88554297e+00, ...,
+         -4.29705229e-01,  5.41238871e-01,  7.54621399e-01]],
 
-       [[  9.83148843,  18.34128265,  -0.93115828, ...,   3.99997258,
-          11.58747961,   3.56340506],
-        [ 13.26363403,   8.45128714,  16.40603378, ...,  10.4817822 ,
-          30.55686372,  12.19498037],
-        [ 17.50248014,   4.67788023,   6.80013073, ...,   5.63071409,
-           9.56286534,  15.04280675],
+       [[ 7.98345542e+00, -2.85986332e+00, -2.59106903e+00, ...,
+         -1.11511568e+01,  1.64472538e+00,  6.74064163e+00],
+        [-2.03509543e+00,  1.01301275e+01,  1.83056669e+00, ...,
+          5.15417192e+00,  7.05046454e+00,  4.57066862e+00],
+        [ 1.44630255e+01, -2.90562147e-02, -4.30510032e+00, ...,
+          6.06787113e-01,  3.26072076e+00, -5.10606040e+00],
         ...,
-        [ 10.4192724 ,   8.7529961 ,   6.16215804, ...,  -3.56199399,
-           0.86367106,  -0.95984589],
-        [ -0.57859673,  -0.69818652,   1.52007345, ...,   5.46174366,
-           6.19511594,   2.29468612],
-        [ 16.72362679,  13.23662592,   8.83607735, ...,   4.84823178,
-           7.11365238,   9.61956278]]])</pre></li></ul></div></li><li class='xr-section-item'><input id='section-79d02e72-0980-42b3-bef3-956f464f1bc8' class='xr-section-summary-in' type='checkbox'  checked><label for='section-79d02e72-0980-42b3-bef3-956f464f1bc8' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>created_at :</span></dt><dd>2020-02-21T08:24:43.533067</dd><dt><span>inference_library :</span></dt><dd>Turing</dd></dl></div></li></ul></div></div><p>Here is a plot of the trace. Note the intelligent labels.</p><pre><code class="language-julia">plot_trace(idata);</code></pre><p><img src="quick_turingtrace.png" alt/></p><p>We can also generate summary stats</p><pre><code class="language-julia">summarystats(idata)</code></pre><table border="1" class="dataframe">
+        [ 4.44810258e+00,  1.33478476e+00,  2.00091201e+00, ...,
+          3.44200955e-01,  4.31265715e+00,  7.24614879e+00],
+        [ 7.39221975e+00,  7.15056434e+00,  7.21958722e+00, ...,
+          9.46262410e+00,  5.91568190e+00,  5.02864574e+00],
+        [ 1.71488979e-01, -1.49344629e+00,  3.52902685e-01, ...,
+         -4.71335503e-01,  3.22386352e+00,  2.33483443e-02]]])</pre></li></ul></div></li><li class='xr-section-item'><input id='section-edfe8e41-9191-41df-9b91-320c9c5a9b69' class='xr-section-summary-in' type='checkbox'  checked><label for='section-edfe8e41-9191-41df-9b91-320c9c5a9b69' class='xr-section-summary' >Attributes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>created_at :</span></dt><dd>2020-02-26T13:01:35.236108</dd><dt><span>arviz_version :</span></dt><dd>0.6.1</dd><dt><span>inference_library :</span></dt><dd>Turing</dd></dl></div></li></ul></div></div><p>Here is a plot of the trace. Note the intelligent labels.</p><pre><code class="language-julia">plot_trace(idata);</code></pre><p><img src="quick_turingtrace.png" alt/></p><p>We can also generate summary stats</p><pre><code class="language-julia">summarystats(idata)</code></pre><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -485,142 +486,142 @@ dl.xr-attrs {
   <tbody>
     <tr>
       <th>μ</th>
-      <td>4.377</td>
-      <td>3.083</td>
-      <td>-1.667</td>
-      <td>10.020</td>
-      <td>0.133</td>
-      <td>0.094</td>
-      <td>538.0</td>
-      <td>538.0</td>
-      <td>538.0</td>
-      <td>1076.0</td>
+      <td>4.437</td>
+      <td>3.455</td>
+      <td>-1.905</td>
+      <td>10.928</td>
+      <td>0.161</td>
+      <td>0.114</td>
+      <td>458.0</td>
+      <td>458.0</td>
+      <td>461.0</td>
+      <td>1041.0</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>τ</th>
-      <td>3.955</td>
-      <td>3.338</td>
-      <td>0.415</td>
-      <td>9.964</td>
-      <td>0.274</td>
-      <td>0.194</td>
-      <td>149.0</td>
-      <td>149.0</td>
-      <td>92.0</td>
-      <td>78.0</td>
-      <td>1.03</td>
+      <td>4.243</td>
+      <td>3.207</td>
+      <td>0.691</td>
+      <td>10.049</td>
+      <td>0.182</td>
+      <td>0.128</td>
+      <td>312.0</td>
+      <td>312.0</td>
+      <td>172.0</td>
+      <td>89.0</td>
+      <td>1.05</td>
     </tr>
     <tr>
       <th>θ[1]</th>
-      <td>6.425</td>
-      <td>6.031</td>
-      <td>-3.742</td>
-      <td>18.191</td>
-      <td>0.220</td>
-      <td>0.155</td>
-      <td>754.0</td>
-      <td>754.0</td>
-      <td>694.0</td>
-      <td>1390.0</td>
+      <td>6.632</td>
+      <td>6.050</td>
+      <td>-4.646</td>
+      <td>18.228</td>
+      <td>0.201</td>
+      <td>0.142</td>
+      <td>908.0</td>
+      <td>908.0</td>
+      <td>791.0</td>
+      <td>1424.0</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>θ[2]</th>
-      <td>4.970</td>
-      <td>4.820</td>
-      <td>-3.771</td>
-      <td>14.783</td>
-      <td>0.138</td>
-      <td>0.125</td>
-      <td>1222.0</td>
-      <td>748.0</td>
-      <td>1096.0</td>
-      <td>1657.0</td>
-      <td>1.00</td>
+      <td>5.075</td>
+      <td>4.954</td>
+      <td>-4.171</td>
+      <td>14.577</td>
+      <td>0.159</td>
+      <td>0.113</td>
+      <td>967.0</td>
+      <td>967.0</td>
+      <td>866.0</td>
+      <td>1884.0</td>
+      <td>1.01</td>
     </tr>
     <tr>
       <th>θ[3]</th>
-      <td>3.871</td>
-      <td>5.398</td>
-      <td>-6.413</td>
-      <td>14.506</td>
-      <td>0.149</td>
-      <td>0.116</td>
-      <td>1319.0</td>
-      <td>1078.0</td>
-      <td>1129.0</td>
-      <td>1537.0</td>
+      <td>3.805</td>
+      <td>5.652</td>
+      <td>-6.956</td>
+      <td>14.573</td>
+      <td>0.166</td>
+      <td>0.117</td>
+      <td>1162.0</td>
+      <td>1162.0</td>
+      <td>1056.0</td>
+      <td>1743.0</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>θ[4]</th>
-      <td>4.819</td>
-      <td>4.756</td>
-      <td>-3.743</td>
-      <td>14.583</td>
-      <td>0.140</td>
-      <td>0.104</td>
-      <td>1157.0</td>
-      <td>1042.0</td>
-      <td>982.0</td>
-      <td>2188.0</td>
+      <td>4.883</td>
+      <td>4.987</td>
+      <td>-4.407</td>
+      <td>14.330</td>
+      <td>0.151</td>
+      <td>0.107</td>
+      <td>1089.0</td>
+      <td>1089.0</td>
+      <td>1036.0</td>
+      <td>1750.0</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>θ[5]</th>
-      <td>3.517</td>
-      <td>4.615</td>
-      <td>-4.736</td>
-      <td>12.860</td>
-      <td>0.138</td>
-      <td>0.106</td>
-      <td>1111.0</td>
-      <td>941.0</td>
-      <td>977.0</td>
-      <td>1473.0</td>
+      <td>3.423</td>
+      <td>5.071</td>
+      <td>-7.170</td>
+      <td>12.195</td>
+      <td>0.155</td>
+      <td>0.110</td>
+      <td>1070.0</td>
+      <td>1070.0</td>
+      <td>951.0</td>
+      <td>1671.0</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>θ[6]</th>
-      <td>3.949</td>
-      <td>4.653</td>
-      <td>-5.486</td>
-      <td>12.415</td>
-      <td>0.129</td>
-      <td>0.099</td>
-      <td>1302.0</td>
-      <td>1102.0</td>
-      <td>1153.0</td>
-      <td>1838.0</td>
+      <td>3.952</td>
+      <td>5.122</td>
+      <td>-5.700</td>
+      <td>13.803</td>
+      <td>0.160</td>
+      <td>0.113</td>
+      <td>1024.0</td>
+      <td>1024.0</td>
+      <td>936.0</td>
+      <td>1627.0</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>θ[7]</th>
-      <td>6.514</td>
-      <td>4.874</td>
-      <td>-1.881</td>
-      <td>16.258</td>
-      <td>0.247</td>
-      <td>0.175</td>
-      <td>390.0</td>
-      <td>390.0</td>
-      <td>413.0</td>
-      <td>1074.0</td>
+      <td>6.794</td>
+      <td>5.288</td>
+      <td>-2.808</td>
+      <td>17.764</td>
+      <td>0.191</td>
+      <td>0.135</td>
+      <td>765.0</td>
+      <td>765.0</td>
+      <td>730.0</td>
+      <td>1668.0</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>θ[8]</th>
-      <td>4.954</td>
-      <td>5.314</td>
-      <td>-4.265</td>
-      <td>15.910</td>
-      <td>0.150</td>
-      <td>0.132</td>
-      <td>1249.0</td>
-      <td>806.0</td>
-      <td>1075.0</td>
-      <td>1557.0</td>
+      <td>4.978</td>
+      <td>5.685</td>
+      <td>-5.908</td>
+      <td>16.139</td>
+      <td>0.161</td>
+      <td>0.119</td>
+      <td>1246.0</td>
+      <td>1143.0</td>
+      <td>1069.0</td>
+      <td>1892.0</td>
       <td>1.01</td>
     </tr>
   </tbody>
@@ -668,7 +669,7 @@ stan_model = Stanmodel(
     random = CmdStan.Random(8675309),
 )
 _, stan_chns, _ = stan(stan_model, schools_dat, summary = false);</code></pre><pre><code class="language-none">
-File /home/vsts/work/1/s/docs/build/tmp/schools.stan will be updated.</code></pre><pre><code class="language-julia">plot_density(convert_to_inference_data(stan_chns); var_names=[&quot;mu&quot;, &quot;tau&quot;]);</code></pre><p><img src="quick_cmdstandensity.svg" alt/></p><p>Again, converting to <code>InferenceData</code>, we can get much richer labelling and mixing of data. Note that we&#39;re using the same <a href="reference.html#ArviZ.from_cmdstan-Tuple"><code>from_cmdstan</code></a> function used by ArviZ to process cmdstan output files, but through the power of dispatch in Julia, if we pass a <code>Chains</code> object, it instead uses ArviZ.jl&#39;s overloads, which forward to <a href="reference.html#ArviZ.from_mcmcchains-NTuple{4,Any}"><code>from_mcmcchains</code></a>.</p><pre><code class="language-julia">idata = from_cmdstan(
+File /home/vsts/work/1/s/docs/build/tmp/schools.stan will be updated.</code></pre><pre><code class="language-julia">plot_density(stan_chns; var_names=[&quot;mu&quot;, &quot;tau&quot;]);</code></pre><p><img src="quick_cmdstandensity.svg" alt/></p><p>Again, converting to <code>InferenceData</code>, we can get much richer labelling and mixing of data. Note that we&#39;re using the same <a href="reference.html#ArviZ.from_cmdstan-Tuple"><code>from_cmdstan</code></a> function used by ArviZ to process cmdstan output files, but through the power of dispatch in Julia, if we pass a <code>Chains</code> object, it instead uses ArviZ.jl&#39;s overloads, which forward to <a href="reference.html#ArviZ.from_mcmcchains-NTuple{4,Any}"><code>from_mcmcchains</code></a>.</p><pre><code class="language-julia">idata = from_cmdstan(
     stan_chns;
     posterior_predictive = &quot;y_hat&quot;,
     observed_data = Dict(&quot;y&quot; =&gt; schools_dat[&quot;y&quot;]),
@@ -729,7 +730,7 @@ post_postpred = map(post) do post_draws
         pred_draw = delete(pred_draw, keys(constant_data))
         return merge(pred_draw, post_draw)
     end
-end;</code></pre><p>Each Soss draw is a <code>NamedTuple</code>. Now we combine all of the samples to an <code>InferenceData</code>:</p><pre><code class="language-julia">idata = from_namedtuple(
+end;</code></pre><p>Each Soss draw is a <code>NamedTuple</code>. We can plot the rank order statistics of the posterior to identify poor convergence:</p><pre><code class="language-julia">plot_rank(post; var_names = [&quot;μ&quot;, &quot;τ&quot;]);</code></pre><p><img src="quick_sossrank.png" alt/></p><p>Now we combine all of the samples to an <code>InferenceData</code>:</p><pre><code class="language-julia">idata = from_namedtuple(
     post_postpred;
     posterior_predictive = [:y],
     prior = prior_priorpred,
@@ -759,17 +760,17 @@ Pkg.status()</code></pre><pre><code class="language-none">    Status `~/work/1/s
   [593b3428] CmdStan v6.0.2
   [31c24e10] Distributions v0.22.4
   [e30172f5] Documenter v0.24.5
-  [c7f686f2] MCMCChains v2.0.0
+  [c7f686f2] MCMCChains v3.0.0
   [d9ec5142] NamedTupleTools v0.12.1
   [8ce77f84] Soss v0.10.0 #master (https://github.com/cscherrer/Soss.jl.git)</code></pre><pre><code class="language-julia">using InteractiveUtils
 versioninfo()</code></pre><pre><code class="language-none">Julia Version 1.3.1
 Commit 2d5741174c (2019-12-30 21:36 UTC)
 Platform Info:
   OS: Linux (x86_64-pc-linux-gnu)
-  CPU: Intel(R) Xeon(R) CPU E5-2673 v4 @ 2.30GHz
+  CPU: Intel(R) Xeon(R) Platinum 8171M CPU @ 2.60GHz
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-6.0.1 (ORCJIT, broadwell)
+  LLVM: libLLVM-6.0.1 (ORCJIT, skylake)
 Environment:
   JULIA_VERSION = 1.3
-  JULIA_CMDSTAN_HOME = /home/vsts/work/_temp/.cmdstan//cmdstan-2.22.1/</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Home</a><a class="docs-footer-nextpage" href="api.html">API »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Friday 21 February 2020 08:27">Friday 21 February 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+  JULIA_CMDSTAN_HOME = /home/vsts/work/_temp/.cmdstan//cmdstan-2.22.1/</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Home</a><a class="docs-footer-nextpage" href="api.html">API »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Wednesday 26 February 2020 13:03">Wednesday 26 February 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
